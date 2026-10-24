@@ -1,0 +1,43 @@
+package interpreter.model.exp;
+
+import interpreter.exceptions.ExpressionException;
+import interpreter.exceptions.MyException;
+import interpreter.model.adt.IDictionary;
+import interpreter.model.adt.MyDictionary;
+import interpreter.model.value.BoolValue;
+import interpreter.model.value.IValue;
+import interpreter.model.value.IntValue;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class LogicExpTest {
+    private IDictionary<String, IValue> symTable;
+
+    private static IExp bool(boolean n) {
+        return new ValueExp(new BoolValue(n));
+    }
+    @BeforeEach
+    void setUp() {
+        symTable = new MyDictionary<>();
+    }
+    @Test void andIsTrueIfBothTrue() throws MyException {
+        assertEquals(new BoolValue(true),new LogicExp(LogicOp.AND,bool(true),bool(true)).eval(symTable));
+        assertEquals(new BoolValue(false),new LogicExp(LogicOp.AND,bool(true),bool(false)).eval(symTable));
+    }
+    @Test void orIsFalseIfBothFalse() throws MyException {
+        assertEquals(new BoolValue(false),new LogicExp(LogicOp.OR,bool(false),bool(false)).eval(symTable));
+        assertEquals(new BoolValue(true),new LogicExp(LogicOp.OR,bool(true),bool(false)).eval(symTable));
+    }
+    @Test void nonBooleanFirstOperandThrows() {
+        var e = assertThrows(ExpressionException.class,()->new LogicExp(LogicOp.AND,new ValueExp(new IntValue(1)),bool(true)).eval(symTable));
+        assertEquals("first operand is not a boolean",e.getMessage());
+    }
+    @Test void nonBooleanSecondOperandThrows() {
+        var e = assertThrows(ExpressionException.class,()->new LogicExp(LogicOp.AND,bool(true),new ValueExp(new IntValue(1))).eval(symTable));
+        assertEquals("second operand is not a boolean",e.getMessage());
+    }
+
+
+}
