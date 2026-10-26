@@ -1,0 +1,41 @@
+package interpreter.model.stmt;
+
+import interpreter.exceptions.MyException;
+import interpreter.exceptions.StatementException;
+import interpreter.model.PrgState;
+import interpreter.model.adt.MyDictionary;
+import interpreter.model.adt.MyList;
+import interpreter.model.adt.MyStack;
+import interpreter.model.type.BoolType;
+import interpreter.model.type.IntType;
+import interpreter.model.value.BoolValue;
+import interpreter.model.value.IntValue;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class VarDeclStmtTest {
+    private static PrgState freshState(IStmt stmt) {
+        return new PrgState(new MyStack<>(), new MyDictionary<>(), new MyList<>(), stmt);
+    }
+
+    private static void step(PrgState state) throws MyException {
+        state.getExeStack().pop().execute(state);
+    }
+    @Test void intDeclarationStartsAtZero() throws MyException {
+        PrgState state = freshState(new VarDeclStmt("v",new IntType()));
+        step(state);
+        assertEquals(new IntValue(0),state.getSymTable().lookup("v"));
+    }
+    @Test void boolDeclarationStartsAtFalse() throws MyException {
+        PrgState state = freshState(new VarDeclStmt("v",new BoolType()));
+        step(state);
+        assertEquals(new BoolValue(false),state.getSymTable().lookup("v"));
+    }
+    @Test void alreadyDeclaredVariablesThrow() {
+        PrgState state = freshState(new VarDeclStmt("v",new IntType()));
+        state.getSymTable().put("v",new IntValue(0));
+        var ex = assertThrows(StatementException.class,()->step(state));
+        assertEquals("variable v is already declared",ex.getMessage());
+    }
+}
