@@ -40,16 +40,19 @@ class ArithExpTest {
         assertEquals(new IntValue(17),new ArithExp(ArithOp.ADD,num(2),new ArithExp(ArithOp.MUL,num(3),num(5))).eval(symTable));
     }
     @Test void divisionByZeroThrows() {
-        var e = assertThrows(ExpressionException.class, ()->new ArithExp(ArithOp.DIV,num(1),num(0)).eval(symTable));
-        assertEquals("division by zero",e.getMessage());
+        IExp e = new ArithExp(ArithOp.DIV,num(1),num(0));
+        var ex = assertThrows(ExpressionException.class, ()->e.eval(symTable));
+        assertEquals("division by zero",ex.getMessage());
     }
     @Test void nonIntegerFirstOperandThrows() {
-        var e = assertThrows(ExpressionException.class, ()->new ArithExp(ArithOp.ADD,new ValueExp(new BoolValue(true)),num(1)).eval(symTable));
-        assertEquals("first operand is not an integer",e.getMessage());
+        IExp e = new ArithExp(ArithOp.ADD,new ValueExp(new BoolValue(true)),num(1));
+        var ex = assertThrows(ExpressionException.class, ()->e.eval(symTable));
+        assertEquals("first operand is not an integer",ex.getMessage());
     }
     @Test void nonIntegerSecondOperandThrows() {
-        var e = assertThrows(ExpressionException.class, ()->new ArithExp(ArithOp.ADD,num(1),new ValueExp(new BoolValue(true))).eval(symTable));
-        assertEquals("second operand is not an integer",e.getMessage());
+        IExp e = new ArithExp(ArithOp.ADD,num(1),new ValueExp(new BoolValue(true)));
+        var ex = assertThrows(ExpressionException.class, ()->e.eval(symTable));
+        assertEquals("second operand is not an integer",ex.getMessage());
     }
     @Test void useVariableValues() throws MyException{
         symTable.put("w",new IntValue(1));

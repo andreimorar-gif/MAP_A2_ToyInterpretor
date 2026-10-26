@@ -31,12 +31,14 @@ class LogicExpTest {
         assertEquals(new BoolValue(true),new LogicExp(LogicOp.OR,bool(true),bool(false)).eval(symTable));
     }
     @Test void nonBooleanFirstOperandThrows() {
-        var e = assertThrows(ExpressionException.class,()->new LogicExp(LogicOp.AND,new ValueExp(new IntValue(1)),bool(true)).eval(symTable));
-        assertEquals("first operand is not a boolean",e.getMessage());
+        IExp e = new LogicExp(LogicOp.AND,new ValueExp(new IntValue(1)),bool(true));
+        var ex = assertThrows(ExpressionException.class,()->e.eval(symTable));
+        assertEquals("first operand is not a boolean",ex.getMessage());
     }
     @Test void nonBooleanSecondOperandThrows() {
-        var e = assertThrows(ExpressionException.class,()->new LogicExp(LogicOp.AND,bool(true),new ValueExp(new IntValue(1))).eval(symTable));
-        assertEquals("second operand is not a boolean",e.getMessage());
+        IExp e = new LogicExp(LogicOp.AND,bool(true),new ValueExp(new IntValue(1)));
+        var ex = assertThrows(ExpressionException.class,()->e.eval(symTable));
+        assertEquals("second operand is not a boolean",ex.getMessage());
     }
 
 

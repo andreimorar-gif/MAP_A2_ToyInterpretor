@@ -29,7 +29,7 @@ class MyStackTest {
         assertTrue(stack.isEmpty());
     }
     @Test void popOnEmptyStackThrows() {
-        var e = assertThrows(ADTException.class, () -> stack.pop());
-        assertEquals("pop from an empty stack",e.getMessage());
+        var ex = assertThrows(ADTException.class, () -> stack.pop());
+        assertEquals("pop from an empty stack",ex.getMessage());
     }
 }

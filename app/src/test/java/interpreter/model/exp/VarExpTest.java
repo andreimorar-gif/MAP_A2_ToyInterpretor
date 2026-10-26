@@ -22,8 +22,8 @@ class VarExpTest {
         assertEquals(new IntValue(2),new VarExp("w").eval(symTable));
     }
     @Test void undefinedVariableThrows() {
-        var e = assertThrows(ExpressionException.class, ()->new VarExp("a").eval(symTable));
-        assertEquals("variable a is not defined", e.getMessage());
+        var ex = assertThrows(ExpressionException.class, ()->new VarExp("a").eval(symTable));
+        assertEquals("variable a is not defined", ex.getMessage());
     }
 
 }
