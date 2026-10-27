@@ -25,19 +25,24 @@ class ArithExpTest {
     }
 
     @Test void addition() throws MyException {
-        assertEquals(new IntValue(5),new ArithExp(ArithOp.ADD,num(2),num(3)).eval(symTable));
+        IExp e = new ArithExp(ArithOp.ADD,num(2),num(3));
+        assertEquals(new IntValue(5),e.eval(symTable));
     }
     @Test void substraction() throws MyException {
-        assertEquals(new IntValue(2),new ArithExp(ArithOp.SUB,num(5),num(3)).eval(symTable));
+        IExp e = new ArithExp(ArithOp.SUB,num(5),num(3));
+        assertEquals(new IntValue(2),e.eval(symTable));
     }
     @Test void multiplication() throws MyException {
-        assertEquals(new IntValue(10),new ArithExp(ArithOp.MUL,num(5),num(2)).eval(symTable));
+        IExp e = new ArithExp(ArithOp.MUL,num(5),num(2));
+        assertEquals(new IntValue(10),e.eval(symTable));
     }
     @Test void integerDivision() throws MyException {
-        assertEquals(new IntValue(5),new ArithExp(ArithOp.DIV,num(11),num(2)).eval(symTable));
+        IExp e = new ArithExp(ArithOp.DIV,num(11),num(2));
+        assertEquals(new IntValue(5),e.eval(symTable));
     }
     @Test void respectsOperatorOrderInTree() throws MyException {
-        assertEquals(new IntValue(17),new ArithExp(ArithOp.ADD,num(2),new ArithExp(ArithOp.MUL,num(3),num(5))).eval(symTable));
+        IExp e = new ArithExp(ArithOp.ADD,num(2),new ArithExp(ArithOp.MUL,num(3),num(5)));
+        assertEquals(new IntValue(17),e.eval(symTable));
     }
     @Test void divisionByZeroThrows() {
         IExp e = new ArithExp(ArithOp.DIV,num(1),num(0));
@@ -56,7 +61,8 @@ class ArithExpTest {
     }
     @Test void useVariableValues() throws MyException{
         symTable.put("w",new IntValue(1));
-        assertEquals(new IntValue(3),new ArithExp(ArithOp.ADD,new VarExp("w"),num(2)).eval(symTable));
+        IExp e = new ArithExp(ArithOp.ADD,new VarExp("w"),num(2));
+        assertEquals(new IntValue(3),e.eval(symTable));
     }
 
 }
